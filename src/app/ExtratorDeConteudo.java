@@ -2,8 +2,7 @@ package app;
 
 import java.util.List;
 
-public interface ExtratorDeConteudo {
-	
-	public List<Conteudo> extraiConteudos(String json);
-
+public interface ExtractorContent {
+    List<Content> extractContents(String json);
 }
+
