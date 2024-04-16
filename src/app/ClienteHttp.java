@@ -1,25 +1,25 @@
 package app;
 
 import java.io.IOException;
+import java.net.HttpClient;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
+import java.util.concurrent.ExecutionException;
 
-public class ClienteHttp {
+public class HttpClientWrapper {
 
-	public String buscaDados(String url) {
-		
-		try {
-			URI endereco = URI.create(url);
-			var client = HttpClient.newHttpClient();
-			var request = HttpRequest.newBuilder(endereco).GET().build();
-			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-			String body = response.body();
-			return body;
-		}catch(IOException | InterruptedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    public String getDataFromUrl(String urlString) {
+        try {
+            URI uri = URI.create(urlString);
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder(uri).GET().build();
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            return response.body();
+        } catch (InterruptedException | IOException e) {
+            throw new RuntimeException("Error while making HTTP request", e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException("Error while processing HTTP response", e);
+        }
+    }
 }
